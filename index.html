@@ -87,13 +87,17 @@
               renderData()
             }
           })
+          .catch(err=>{
+            console.error(err)
+            const listDom=document.getElementById('list')
+            listDom.innerText='加载失败'
+          })
       }
       //用数据渲染页面
       function renderData(){
         const listDom=document.getElementById('list')
         listDom.innerHTML=''
         for(const item of data){
-          console.log(111)
           //创建dom+塞数据
           const itemDom=document.createElement('div')
           //图片裁剪的话，多创建一层dom作为蒙版
