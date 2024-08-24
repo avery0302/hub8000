@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>直面天命</title>
+    <style>
+      body{
+        color: #191919;
+      }
+      #title{
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      #list{
+        display: flex;
+        flex-direction: column;
+        gap:12px
+      }
+      .item{
+        /*横向排布*/
+        display: flex;
+        gap:8px
+      }
+      .left{
+        /*蒙版*/
+        width: 35vw;
+        height: 35vw;
+        overflow: hidden;
+        border-radius: 12px;
+        /*使图片适配蒙版的大小*/
+        display: flex;
+      }
+      .img{
+        /*居中但是变形*/
+        width: 100%;
+        /*恢复长宽比*/
+        object-fit: cover;
+      }
+      .right{
+        /*确保只使用剩余空间*/
+        flex:1;
+        overflow: hidden;
+      }
+      .name{
+        /*默认字号是16px*/
+        font-size: 20px;
+      }
+      .desc{
+        color: #2c2c2c;
+        font-weight: 300;
+        /*自动换行*/
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">动漫列表</div>
+    <div id='list'>
+      <div>
+        加载中...
+      </div>
+    </div>
+    <script>
+      //mock数据
+      let data=[
+        {
+          img:'wukong2.jpeg',
+          name:'1111111',
+          desc:'11111111111111111111111111111111111111111111111111111111111111111111111',
+        },
+        {
+          img:'wukong.jpeg',
+          name:'2222222',
+          desc:'22222222222222222222222222222222222222222222222222222222222222222222222',
+        },
+      ]
+      //页面加载好第一时间请求后端数据
+      window.onload=fetchData()
+      //拿到真实数据后把假数据替换掉
+      function fetchData(){
+        fetch('http://127.0.0.1:8040')
+          .then(res=>res.json())
+          .then(list=>{
+            if(list&&list.length>0){
+              data=list
+              renderData()
+            }
+          })
+      }
+      //用数据渲染页面
+      function renderData(){
+        const listDom=document.getElementById('list')
+        listDom.innerHTML=''
+        for(const item of data){
+          console.log(111)
+          //创建dom+塞数据
+          const itemDom=document.createElement('div')
+          //图片裁剪的话，多创建一层dom作为蒙版
+          const leftDom=document.createElement('div')
+          const imgDom=document.createElement('img')
+          imgDom.src=item.img
+          //文字部分
+          const rightDom=document.createElement('div')
+          const nameDom=document.createElement('div')
+          nameDom.innerText=item.name
+          const descDom=document.createElement('div')
+          descDom.innerText=item.desc
+          //子dom和父dom组合起来
+          leftDom.appendChild(imgDom)
+          rightDom.appendChild(nameDom)
+          rightDom.appendChild(descDom)
+          itemDom.appendChild(leftDom)
+          itemDom.appendChild(rightDom)
+          listDom.appendChild(itemDom)
+          //dom和样式关联
+          itemDom.className='item'
+          leftDom.className='left'
+          imgDom.className='img'
+          rightDom.className='right'
+          nameDom.className='name'
+          descDom.className='desc'
+        }
+      }
+    </script>
+  </body>
+</html>
