@@ -79,8 +79,11 @@
       window.onload=fetchData()
       //拿到真实数据后把假数据替换掉
       function fetchData(){
-        fetch('http://127.0.0.1:8040')
-          .then(res=>res.json())
+        console.log(111)
+        fetch('http://127.0.0.1:8040/anime')
+          .then(res=>{
+            return res.json()
+          })
           .then(list=>{
             if(list&&list.length>0){
               data=list
@@ -89,6 +92,9 @@
           })
           .catch(err=>{
             console.error(err)
+            alert(err.name)
+            alert(err.message)
+            alert(err.stack)
             const listDom=document.getElementById('list')
             listDom.innerText='加载失败'
           })
